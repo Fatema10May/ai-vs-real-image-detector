@@ -29,7 +29,7 @@ if uploaded_file is not None:
     st.markdown("---")
     
     # উল্টো লেবেল লজিক (raw_pred < 0.5 হলে REAL)
-    if raw_pred < 0.5:
+    if raw_pred > 0.5:
         confidence = (1 - raw_pred) * 100
         st.success(f"### Result: REAL Image")
         st.info(f"Confidence: {confidence:.2f}%")
