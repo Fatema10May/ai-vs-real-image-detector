@@ -38,8 +38,8 @@ if uploaded_file is not None:
         # Ensure image is RGB (converts PNG with alpha channels or grayscale to 3 channels)
         img = image.convert('RGB')
         
-        # Resize image to model's input size (32x32)
-        img = img.resize((32, 32))
+        # Resize image to model's input size (128x128)
+        img = img.resize((128, 128))
         
         # Convert to numpy array and scale pixels to [0, 1]
         img_array = np.array(img, dtype=np.float32) / 255.0
