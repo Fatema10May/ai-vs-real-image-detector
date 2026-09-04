@@ -5,7 +5,7 @@ from PIL import Image
 from tensorflow.keras.applications.resnet_v2 import preprocess_input
 
 # Load Model
-@st.cache_resource
+#@st.cache_resource
 def load_model():
     return tf.keras.models.load_model('models/ai_real_detector.keras')
 
