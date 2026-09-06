@@ -1,42 +1,39 @@
-from PIL import Image
-import numpy as np
 import streamlit as st
 import tensorflow as tf
+import numpy as np
+from PIL import Image
+from tensorflow.keras.applications.resnet_v2 import preprocess_input
 
+# Force load the new model file to clear old Streamlit cache
+@st.cache_resource
+def load_model():
+    return tf.keras.models.load_model('models/resnet_final.keras')
+
+model = load_model()
 
 st.title("AI vs Real Image Detector")
-st.write("Upload an image to check whether it's AI-generated or Real.")
+st.write("Upload an image to check if it's Real or AI-generated.")
 
-
-@st.cache_resource
-def load_my_model():
-    return tf.keras.models.load_model("ai_real_detector.keras")
-
-
-model = load_my_model()
-
-uploaded_file = st.file_uploader(
-    "Choose an image...", type=["jpg", "jpeg", "png", "webp"]
-)
+uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
-    # ১. স্ক্রিনে ছবিটি দেখানো
-    st.image(uploaded_file, caption="Uploaded Image", use_column_width=True)
-    st.write("Classifying...")
+    image = Image.open(uploaded_file)
+    st.image(image, caption='Uploaded Image', use_container_width=True)
 
-    image = Image.open(uploaded_file).convert("RGB")
-    image = image.resize((128, 128))
-    img_array = np.array(image) / 255.0
-    img_array = np.expand_dims(img_array, axis=0)
+    with st.spinner('Analyzing image...'):
+        # Image Preprocessing for ResNet50V2 (128x128)
+        img = image.convert('RGB')
+        img = img.resize((128, 128))
+        
+        img_array = np.array(img, dtype=np.float32)
+        img_array = preprocess_input(img_array)
+        img_array = np.expand_dims(img_array, axis=0)
 
-    
-    raw_pred = model.predict(img_array)[0][0]
+        # Prediction
+        raw_pred = model.predict(img_array)[0][0]
 
-    if raw_pred > 0.5:
-        confidence = raw_pred * 100
-        st.success(f"Result: **Real Image** (Confidence: {confidence:.2f}%)")
-    else:
-        confidence = (1 - raw_pred) * 100
-        st.error(
-            f"Result: **AI Generated / Fake Image** (Confidence: {confidence:.2f}%)"
-        )
+        # Output Logic
+        if raw_pred < 0.5:
+            st.success(f"Prediction: REAL Image (Confidence: {(1-raw_pred)*100:.2f}%)")
+        else:
+            st.error(f"Prediction: AI / FAKE Image (Confidence: {raw_pred*100:.2f}%)")
