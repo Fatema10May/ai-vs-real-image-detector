@@ -1,4 +1,3 @@
-%%writefile app.py
 import streamlit as st
 import numpy as np
 import tensorflow as tf
@@ -13,7 +12,7 @@ st.write("Upload an image to test whether it is Real or AI-generated.")
 # Load Trained Model
 @st.cache_resource
 def load_detection_model():
-    # notebook-এ আপনার সেভ করা মডেলের নাম দিলে এখানে সেটি লোড হবে
+    # model.keras-এর জায়গায় আপনার মডেলে আসল নাম থাকলে সেটি দিন
     return tf.keras.models.load_model("model.keras") 
 
 try:
