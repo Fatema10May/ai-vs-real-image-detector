@@ -27,7 +27,6 @@ uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png
 if uploaded_file is not None:
     img = Image.open(uploaded_file)
     st.image(img, caption="Uploaded Image", use_column_width=True)
-
     # Preprocessing (matching 32x32 target size)
     img_resized = img.resize((32, 32))
     img_array = np.array(img_resized)
