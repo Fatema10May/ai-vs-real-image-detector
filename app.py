@@ -12,13 +12,12 @@ st.write("Upload an image to test whether it is Real or AI-generated.")
 # Load Trained Model
 @st.cache_resource
 def load_detection_model():
-    # model.keras-এর জায়গায় আপনার মডেলে আসল নাম থাকলে সেটি দিন
-    return tf.keras.models.load_model("models/ai_real_detector.keras") 
+    return tf.keras.models.load_model("models/ai_real_detector.keras")
 
 try:
     model = load_detection_model()
 except Exception as e:
-    st.error(f"Error loading model. Please ensure 'model.keras' is in the folder: {e}")
+    st.error(f"Error loading model. Please ensure the model file is in the 'models' folder: {e}")
     st.stop()
 
 # File Uploader
@@ -26,8 +25,9 @@ uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png
 
 if uploaded_file is not None:
     img = Image.open(uploaded_file)
-st.image(img, caption="Uploaded Image", use_container_width=True)
-# Preprocessing (matching 32x32 target size)
+    st.image(img, caption="Uploaded Image", use_container_width=True)
+
+    # Preprocessing (matching 32x32 target size)
     img_resized = img.resize((32, 32))
     img_array = np.array(img_resized)
 
