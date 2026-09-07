@@ -13,7 +13,7 @@ st.write("Upload an image to test whether it is Real or AI-generated.")
 @st.cache_resource
 def load_detection_model():
     # model.keras-এর জায়গায় আপনার মডেলে আসল নাম থাকলে সেটি দিন
-    return tf.keras.models.load_model("model.keras") 
+    return tf.keras.models.load_model("ai_real_detector.keras") 
 
 try:
     model = load_detection_model()
